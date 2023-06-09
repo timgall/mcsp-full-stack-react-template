@@ -1,21 +1,41 @@
 import express from "express";
-import postgres from "postgres";
 import dotenv from "dotenv";
+import pg from "pg";
 
 dotenv.config({ path: "../.env" });
 
+const server = express();
 const PORT = process.env.PORT;
-const sql = postgres(process.env.DATABASE_URL);
-const app = express();
+console.log(PORT);
+server.use(express.static("public"));
+server.use(express.json());
 
-app.use(express.json());
-
-app.get("/api/tasks", (req, res) => {
-  sql`SELECT * FROM tasks`.then((rows) => {
-    res.send(rows);
-  });
+const db = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+server.get("/api/BeanData", (req, res) => {
+  db.query("SELECT * FROM BeanData")
+    .then((result) => {
+      console.log(result.rows);
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    });
+});
+server.get("/api/RegionCountry", (req, res) => {
+  db.query("SELECT * FROM RegionCountry")
+    .then((result) => {
+      console.log(result.rows);
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
