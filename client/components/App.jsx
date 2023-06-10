@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import BeanData from "./BeanData";
+import NewBeanData from "./NewBeanData";
 import image1 from "../images/Africa.png";
 import image2 from "../images/Asia.png";
 import image3 from "../images/Pacific.png";
@@ -25,12 +26,14 @@ const App = () => {
   const handleBeanClick = () => {
     setShowBeanData(false);
     setShowRegions(false);
+    setShowRoastingGraph(true);
   };
   const Header = () => {
     const headerImage = image6;
     const handleHeaderClick = () => {
       setShowBeanData(false);
       setShowRegions(true);
+      setShowRoastingGraph(false);
     };
 
     return (
@@ -63,6 +66,7 @@ const App = () => {
       console.log("I was Clicked: ", "Central America and Caribbean");
     }
     setShowBeanData(true);
+    setShowRoastingGraph(false);
   };
 
   return (
@@ -81,13 +85,21 @@ const App = () => {
         </div>
       )}
       {showBeanData && <BeanData region={selectedRegion} />}
-      <div className="container">
+      {showRoastingGraph && (
+        <div className="roastChart">
+          <img src={image8} className="roastChart" alt="roastChart"></img>
+          <NewBeanData />
+        </div>
+      )}
+      <div className="NewBeanDataImage">
         <img
+          className="NewBeanDataImage"
           src={image7}
           alt="Add Bean Data"
           onClick={() => handleBeanClick()}
         />
       </div>
+      <footer className="footer">Copywright</footer>
     </div>
   );
 };
