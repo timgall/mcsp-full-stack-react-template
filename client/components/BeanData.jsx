@@ -13,9 +13,9 @@ const BeanData = ({ region }) => {
   //change the divs to a table and add a class id to the h2 so that we can show/hide it.
   //use the region, country, bean name, bean roast, and flavor notes as the column names and the returned information as the values.
   return (
-    <div>
-      <h2 id="bean-data" className="hidden">
-        Bean Data:
+    <div className="beanTableClass">
+      <h2 id="beanHeader" className="title">
+        Bean Data
       </h2>
       <table className="bean-table">
         <thead>

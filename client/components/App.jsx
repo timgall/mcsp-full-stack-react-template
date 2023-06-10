@@ -6,6 +6,8 @@ import image3 from "../images/Pacific.png";
 import image4 from "../images/Latin America.png";
 import image5 from "../images/Carribean.png";
 import image6 from "../images/globe.jpeg";
+import image7 from "../images/addBean.png";
+import image8 from "../images/roasting-infographic-small.png";
 
 const App = () => {
   const images = [
@@ -15,15 +17,20 @@ const App = () => {
     { src: image4, id: "Latin America" },
     { src: image5, id: "Central America and Caribbean" },
   ];
-
   const [selectedRegion, setSelectedRegion] = useState("");
+  const [showBeanData, setShowBeanData] = useState(false);
+  const [showRoastingGraph, setShowRoastingGraph] = useState(false);
+  const [showRegions, setShowRegions] = useState(true);
 
+  const handleBeanClick = () => {
+    setShowBeanData(false);
+    setShowRegions(false);
+  };
   const Header = () => {
     const headerImage = image6;
-
     const handleHeaderClick = () => {
-      console.log("I was Clicked: ", "Header");
-      // Do something when the header image is clicked
+      setShowBeanData(false);
+      setShowRegions(true);
     };
 
     return (
@@ -55,22 +62,32 @@ const App = () => {
       setSelectedRegion("Central America and Caribbean");
       console.log("I was Clicked: ", "Central America and Caribbean");
     }
+    setShowBeanData(true);
   };
 
   return (
     <div id="app">
       <Header />
-      <div className="image-container">
-        {images.map((image) => (
-          <img
-            key={image.id}
-            src={image.src}
-            alt="Coffee"
-            onClick={() => handleClick(image.id)}
-          />
-        ))}
+      {showRegions && (
+        <div className="image-container">
+          {images.map((image) => (
+            <img
+              key={image.id}
+              src={image.src}
+              alt="Coffee"
+              onClick={() => handleClick(image.id)}
+            />
+          ))}
+        </div>
+      )}
+      {showBeanData && <BeanData region={selectedRegion} />}
+      <div className="container">
+        <img
+          src={image7}
+          alt="Add Bean Data"
+          onClick={() => handleBeanClick()}
+        />
       </div>
-      <BeanData region={selectedRegion} />
     </div>
   );
 };
