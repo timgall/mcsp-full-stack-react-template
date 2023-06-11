@@ -1,40 +1,13 @@
-DROP TABLE IF EXISTS RegionCountry;
 DROP TABLE IF EXISTS BeanData;
 
-CREATE TABLE RegionCountry (
-    Region VARCHAR(50) NOT NULL,
-    Country VARCHAR(50) NOT NULL,
-    PRIMARY KEY (Region, Country)
-);
-
 CREATE TABLE BeanData (
+    id SERIAL PRIMARY KEY,
     Region VARCHAR(50) NOT NULL,
     Country VARCHAR(50) NOT NULL,    
     BeanName VARCHAR(50) NOT NULL,
     BeanRoast VARCHAR(20) NOT NULL,
-    BeanFlavorNotes VARCHAR(100) NOT NULL,
-    FOREIGN KEY (Region, Country) REFERENCES RegionCountry (Region, Country)
+    BeanFlavorNotes VARCHAR(100) NOT NULL
 );
-
-INSERT INTO RegionCountry (Region, Country)
-VALUES
-    ('Latin America', 'Colombia'),
-    ('Latin America', 'Brazil'),
-    ('Latin America', 'Costa Rica'),
-    ('Latin America', 'Guatemala'),
-    ('Latin America', 'Mexico'),
-    ('Africa', 'Ethiopia'),
-    ('Africa', 'Kenya'),
-    ('Africa', 'Tanzania'),
-    ('Asia', 'Indonesia'),
-    ('Asia', 'Vietnam'),
-    ('Asia', 'India'),
-    ('Central America and Caribbean', 'Jamaica'),
-    ('Central America and Caribbean', 'Haiti'),
-    ('Central America and Caribbean', 'Dominican Republic'),
-    ('Pacific Islands', 'Hawaii'),
-    ('Pacific Islands', 'Papua New Guinea'),
-    ('Pacific Islands', 'Fiji');
 
 INSERT INTO BeanData (Region, Country, BeanName, BeanRoast, BeanFlavorNotes)
 VALUES

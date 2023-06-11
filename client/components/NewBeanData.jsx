@@ -1,33 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const NewBeanData = () => {
   const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [beanname, setBeanname] = useState("");
   const [beanroast, setBeanroast] = useState("");
-  const [flavornotes, setFlavornotes] = useState("");
+  const [beanflavornotes, setBeanflavornotes] = useState("");
 
-  useEffect(() => {
+  const handleAddBeanInfo = () => {
     if (
       region !== "" &&
       country !== "" &&
       beanname !== "" &&
       beanroast !== "" &&
-      flavornotes !== ""
+      beanflavornotes !== ""
     ) {
       const data = {
         region: region,
         country: country,
         beanname: beanname,
         beanroast: beanroast,
-        flavornotes: flavornotes,
+        beanflavornotes: beanflavornotes,
       };
 
       fetch("/api/BeanData", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) {
+            alert("Bean Added Successfully!");
+            setRegion("");
+            setCountry("");
+            setBeanname("");
+            setBeanroast("");
+            setBeanflavornotes("");
+          }
+        })
         .then((data) => {
           console.log(data);
         })
@@ -35,45 +45,7 @@ const NewBeanData = () => {
           console.log(err);
         });
     }
-  }, [region, country, beanname, beanroast, flavornotes]);
-
-  const handleUpdateData = () => {
-    const data = {
-      region: region,
-      country: country,
-      beanname: beanname,
-      beanroast: beanroast,
-      flavornotes: flavornotes,
-    };
-
-    const beanId = "your-bean-id";
-    fetch(`/api/BeanData/${beanId}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
-
-  useEffect(() => {
-    const beanId = "your-bean-id";
-
-    fetch(`/api/BeanData/${beanId}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <div className="NewBeanData">
@@ -109,12 +81,11 @@ const NewBeanData = () => {
       <input
         type="text"
         className="inputField"
-        value={flavornotes}
-        onChange={(e) => setFlavornotes(e.target.value)}
+        value={beanflavornotes}
+        onChange={(e) => setBeanflavornotes(e.target.value)}
         placeholder="Flavor Notes"
       />
-      <button onClick={handleUpdateData}>Update Bean Data</button>
-      <button>Delete Bean Data</button>
+      <button onClick={handleAddBeanInfo}>Add Bean Info</button>
     </div>
   );
 };

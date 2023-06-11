@@ -24,16 +24,18 @@ server.get("/api/BeanData", (req, res) => {
       res.status(500).send("Internal Server Error");
     });
 });
-server.get("/api/RegionCountry", (req, res) => {
-  db.query("SELECT * FROM RegionCountry")
-    .then((result) => {
-      console.log(result.rows);
-      res.send(result.rows);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    });
+server.post("/api/BeanData", (req, res) => {
+  const { region, country, beanname, beanroast, beanflavornotes } = req.body;
+  if (!region || !country || !beanname || !beanroast || !beanflavornotes) {
+    res.sendStatus(422);
+    return;
+  }
+  db.query(
+    "INSERT INTO BeanData(region, country, beanname, beanroast, beanflavornotes) VALUES($1,$2,$3,$4,$5) RETURNING *",
+    [region, country, beanname, beanroast, beanflavornotes]
+  ).then((result) => {
+    res.status(201).send(result.rows[0]);
+  });
 });
 
 server.listen(PORT, () => {
