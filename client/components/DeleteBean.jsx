@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 
-const NewBeanData = () => {
+const DeleteBean = () => {
   const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [beanname, setBeanname] = useState("");
   const [beanroast, setBeanroast] = useState("");
   const [beanflavornotes, setBeanflavornotes] = useState("");
-
-  const handleAddBeanInfo = () => {
+  const handleUpdateBeanInfo = () => {
     if (
       region !== "" &&
       country !== "" &&
@@ -22,34 +21,32 @@ const NewBeanData = () => {
         beanroast: beanroast,
         beanflavornotes: beanflavornotes,
       };
-
-      fetch("/api/BeanData", {
-        method: "POST",
+      fetch("/api/BeanData:id", {
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
         .then((res) => {
           if (res.ok) {
-            alert("Bean Added Successfully!");
+            alert("Bean Successfully Deleted");
             setRegion("");
             setCountry("");
             setBeanname("");
             setBeanroast("");
             setBeanflavornotes("");
+          } else {
+            alert(`Sorry, we have encountered an error. ${error}`);
           }
         })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.error(error);
         });
     }
   };
 
   return (
-    <div className="NewBeanData">
-      <h2>Add Bean Information Here</h2>
+    <div className="DeleteBean">
+      <h2>Delete Bean Information Here</h2>
       <input
         type="text"
         className="inputField"
@@ -85,9 +82,9 @@ const NewBeanData = () => {
         onChange={(e) => setBeanflavornotes(e.target.value)}
         placeholder="Flavor Notes"
       />
-      <button onClick={handleAddBeanInfo}>Add Bean Info</button>
+      <button onClick={handleUpdateBeanInfo}>Update Bean Info</button>
     </div>
   );
 };
 
-export default NewBeanData;
+export default DeleteBean;

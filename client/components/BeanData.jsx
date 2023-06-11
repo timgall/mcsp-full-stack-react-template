@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 const BeanData = ({ region }) => {
-  const [beanData, setBeanData] = useState({}); // State to store the fetched data
+  const [BeanData, setBeanData] = useState({}); // State to store the fetched data
 
   useEffect(() => {
     fetch("/api/BeanData")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setBeanData(data); // Update the state with the fetched data
       });
   }, [region]);
@@ -20,6 +21,7 @@ const BeanData = ({ region }) => {
       <table className="bean-table">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Region</th>
             <th>Country</th>
             <th>Bean Name</th>
@@ -28,11 +30,12 @@ const BeanData = ({ region }) => {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(beanData) ? (
-            beanData.map((data, index) => {
+          {Array.isArray(BeanData) ? (
+            BeanData.map((data, index) => {
               if (data.region === region) {
                 return (
                   <tr key={data.beanName || index}>
+                    <td>{data.id}</td>
                     <td>{data.region}</td>
                     <td>{data.country}</td>
                     <td>{data.beanname}</td>

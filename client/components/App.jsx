@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import BeanData from "./BeanData";
 import NewBeanData from "./NewBeanData";
 import image1 from "../images/Africa.png";
