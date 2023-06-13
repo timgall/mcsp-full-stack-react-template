@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from "react";
+// import DeleteBean from "./DeleteBean.jsx";
+import UpdateBean from "./UpdateBean.jsx";
 
-const BeanData = ({ region }) => {
-  const [BeanData, setBeanData] = useState({}); // State to store the fetched data
+const BeanData = ({ region, onBeanClick, selectedBeanData }) => {
+  const [beanData, setBeanData] = useState({});
 
   useEffect(() => {
     fetch("/api/BeanData")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setBeanData(data); // Update the state with the fetched data
+        setBeanData(data);
       });
   }, [region]);
-  //change the divs to a table and add a class id to the h2 so that we can show/hide it.
-  //use the region, country, bean name, bean roast, and flavor notes as the column names and the returned information as the values.
+
+  const handleBeanSelected = (data) => {
+    onBeanClick(data);
+    console.log("Region was clicked");
+  };
+
   return (
     <div className="beanTableClass">
       <h2 id="beanHeader" className="title">
-        Bean Data
+        Coffee Bean Data
       </h2>
       <table className="bean-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Region</th>
             <th>Country</th>
             <th>Bean Name</th>
@@ -30,12 +34,14 @@ const BeanData = ({ region }) => {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(BeanData) ? (
-            BeanData.map((data, index) => {
+          {Array.isArray(beanData) ? (
+            beanData.map((data, index) => {
               if (data.region === region) {
                 return (
-                  <tr key={data.beanName || index}>
-                    <td>{data.id}</td>
+                  <tr
+                    onClick={() => handleBeanSelected(data)}
+                    key={data.beanName || index}
+                  >
                     <td>{data.region}</td>
                     <td>{data.country}</td>
                     <td>{data.beanname}</td>
@@ -54,6 +60,7 @@ const BeanData = ({ region }) => {
           )}
         </tbody>
       </table>
+      {selectedBeanData && <UpdateBean selectedBean={selectedBeanData} />}
     </div>
   );
 };

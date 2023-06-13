@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const UpdateBean = () => {
+const UpdateBean = ({
+  selectedBeanData,
+  setShowUpdateBeanData,
+  setShowRoastingGraph,
+  setShowRegions,
+}) => {
   const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [beanname, setBeanname] = useState("");
   const [beanroast, setBeanroast] = useState("");
   const [beanflavornotes, setBeanflavornotes] = useState("");
+
+  useEffect(() => {
+    if (selectedBeanData) {
+      setRegion(selectedBeanData.region || "");
+      setCountry(selectedBeanData.country || "");
+      setBeanname(selectedBeanData.beanname || "");
+      setBeanroast(selectedBeanData.beanroast || "");
+      setBeanflavornotes(selectedBeanData.beanflavornotes || "");
+    }
+  }, [selectedBeanData]);
 
   const handleUpdateBeanInfo = () => {
     if (
@@ -23,12 +38,13 @@ const UpdateBean = () => {
         beanflavornotes: beanflavornotes,
       };
 
-      fetch(`/api/BeanData/:id`, {
+      fetch(`/api/BeanData/${selectedBeanData.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
         .then((res) => {
+          console.log(selectedBeanData.id);
           if (res.ok) {
             alert("Bean Successfully Updated");
             setRegion("");
@@ -36,8 +52,12 @@ const UpdateBean = () => {
             setBeanname("");
             setBeanroast("");
             setBeanflavornotes("");
+            setShowUpdateBeanData(false);
+            setShowRoastingGraph(false);
+            setShowRegions(true);
           } else {
-            alert(`Sorry, we have encountered an error. ${error}`);
+            alert("Sorry, we have encountered an error.");
+            console.log(data);
           }
         })
         .catch((error) => {
@@ -47,7 +67,7 @@ const UpdateBean = () => {
   };
 
   return (
-    <div className="NewBeanData">
+    <div className="UpdateBeanData">
       <h2>Update Bean Information Here</h2>
       <input
         type="text"
@@ -88,4 +108,5 @@ const UpdateBean = () => {
     </div>
   );
 };
+
 export default UpdateBean;

@@ -9,6 +9,8 @@ import image5 from "../images/Carribean.png";
 import image6 from "../images/globe.jpeg";
 import image7 from "../images/addBean.png";
 import image8 from "../images/roasting-infographic-small.png";
+import UpdateBean from "./UpdateBean";
+import DeleteBean from "./DeleteBean";
 
 const App = () => {
   const images = [
@@ -22,14 +24,31 @@ const App = () => {
   const [showBeanData, setShowBeanData] = useState(false);
   const [showRoastingGraph, setShowRoastingGraph] = useState(false);
   const [showRegions, setShowRegions] = useState(true);
+  const [showDeleteBeanData, setShowDeleteBeanData] = useState(false);
+  const [showUpdateBeanData, setShowUpdateBeanData] = useState(false);
+  const [showNewBeanData, setShowNewBeanData] = useState(false);
+  const [selectedBeanData, setSelectedBeanData] = useState(null);
 
   const handleBeanClick = () => {
     setShowBeanData(false);
     setShowRegions(false);
     setShowRoastingGraph(true);
+    setShowUpdateBeanData(false);
+    setShowNewBeanData(true);
   };
+
+  const handleBeanSelected = (data) => {
+    setSelectedBeanData(data);
+    setShowBeanData(false);
+    setShowRegions(false);
+    setShowRoastingGraph(true);
+    setShowUpdateBeanData(true);
+    setShowNewBeanData(false);
+  };
+
   const Header = () => {
     const headerImage = image6;
+
     const handleHeaderClick = () => {
       setShowBeanData(false);
       setShowRegions(true);
@@ -48,25 +67,13 @@ const App = () => {
       </div>
     );
   };
+
   const handleClick = (id) => {
-    if (id === "Africa") {
-      setSelectedRegion("Africa");
-      console.log("I was Clicked: ", "Africa");
-    } else if (id === "Asia") {
-      setSelectedRegion("Asia");
-      console.log("I was Clicked: ", "Asia");
-    } else if (id === "Pacific Islands") {
-      setSelectedRegion("Pacific Islands");
-      console.log("I was Clicked: ", "Pacific Islands");
-    } else if (id === "Latin America") {
-      setSelectedRegion("Latin America");
-      console.log("I was Clicked: ", "Latin America");
-    } else if (id === "Central America and Caribbean") {
-      setSelectedRegion("Central America and Caribbean");
-      console.log("I was Clicked: ", "Central America and Caribbean");
-    }
+    setSelectedRegion(id);
     setShowBeanData(true);
     setShowRoastingGraph(false);
+    setShowUpdateBeanData(false);
+    setShowNewBeanData(false);
   };
 
   return (
@@ -84,11 +91,26 @@ const App = () => {
           ))}
         </div>
       )}
-      {showBeanData && <BeanData region={selectedRegion} />}
+      {showBeanData && (
+        <BeanData
+          region={selectedRegion}
+          onBeanClick={handleBeanSelected}
+          selectedBeanData={selectedBeanData}
+        />
+      )}
       {showRoastingGraph && (
         <div className="roastChart">
-          <img src={image8} className="roastChart" alt="roastChart"></img>
-          <NewBeanData />
+          <img src={image8} className="roastChart" alt="roastChart" />
+          {showNewBeanData && <NewBeanData />}
+          {showUpdateBeanData && (
+            <UpdateBean
+              selectedBeanData={selectedBeanData}
+              setShowUpdateBeanData={setShowUpdateBeanData}
+              setShowRoastingGraph={setShowRoastingGraph}
+              setShowRegions={setShowRegions}
+            />
+          )}
+          {showDeleteBeanData && <DeleteBean />}
         </div>
       )}
       <div className="NewBeanDataImage">
@@ -96,7 +118,7 @@ const App = () => {
           className="NewBeanDataImage"
           src={image7}
           alt="Add Bean Data"
-          onClick={() => handleBeanClick()}
+          onClick={handleBeanClick}
         />
       </div>
       <footer className="footer">Copywright</footer>

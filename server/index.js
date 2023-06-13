@@ -37,23 +37,29 @@ server.post("/api/BeanData", (req, res) => {
     res.status(201).send(result.rows[0]);
   });
 });
-server.patch("/api/BeanData/:id", (req, res) => {
+server.put("/api/BeanData/:id", (req, res) => {
   const { id } = req.params;
   const { region, country, beanname, beanroast, beanflavornotes } = req.body;
-  Pool.query(
-    "UPDATE BeanData SET region=COALESCE($1, region), country=COALESCE($2, country), beanname=COALESCE($3,beanname), beanroast=COALESCE($4,beanroast), beanflavornotes=COALESCE($5,beanflavornotes) WHERE id=$6 RETURNING *",
-
-    [region, country, beanname, beanroast, beanflavornotes, id]
+  db.query(
+    "UPDATE BeanData SET region=$2, country=$3, beanname=$4, beanroast=$5, beanflavornotes=$6 WHERE id=$1 RETURNING *",
+    [id, region, country, beanname, beanroast, beanflavornotes]
   )
     .then((result) => {
-      res.send(result.rows[0]);
+      if (result.rows.length === 0) {
+        res.status(404).send("Bean Data not found");
+      } else {
+        res.send(result.rows[0]);
+      }
     })
-    .catch(next);
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    });
 });
 
 server.delete("/api/BeanData/:id", (req, res) => {
   const { id } = req.params;
-  Pool.query("SELECT * FROM userInfo WHERE id = $1", [id])
+  db.query("SELECT * FROM userInfo WHERE id = $1", [id])
     .then((result) => {
       res.send(result.rows[0]);
     })
