@@ -57,11 +57,11 @@ server.put("/api/BeanData/:id", (req, res) => {
     });
 });
 
-server.delete("/api/BeanData/:id", (req, res) => {
+server.delete("/api/BeanData/:id", (req, res, next) => {
   const { id } = req.params;
-  db.query("SELECT * FROM userInfo WHERE id = $1", [id])
-    .then((result) => {
-      res.send(result.rows[0]);
+  db.query("DELETE FROM BeanData WHERE id = $1", [id])
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch(next);
 });

@@ -66,6 +66,26 @@ const UpdateBean = ({
     }
   };
 
+  const handleDeleteBean = () => {
+    fetch(`/api/BeanData/${selectedBeanData.id}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.ok) {
+          alert("Bean Successfully Deleted");
+          setShowUpdateBeanData(false);
+          setShowRoastingGraph(false);
+          setShowRegions(true);
+          setShowUpdateBeanData(false);
+        } else {
+          alert("Sorry, we have encountered an error.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div className="UpdateBeanData">
       <h2>Update Bean Information Here</h2>
@@ -105,6 +125,7 @@ const UpdateBean = ({
         placeholder="Flavor Notes"
       />
       <button onClick={handleUpdateBeanInfo}>Update Bean Info</button>
+      <button onClick={handleDeleteBean}>Delete Bean</button>
     </div>
   );
 };

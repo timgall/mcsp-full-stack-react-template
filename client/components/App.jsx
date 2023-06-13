@@ -10,7 +10,6 @@ import image6 from "../images/globe.jpeg";
 import image7 from "../images/addBean.png";
 import image8 from "../images/roasting-infographic-small.png";
 import UpdateBean from "./UpdateBean";
-import DeleteBean from "./DeleteBean";
 
 const App = () => {
   const images = [
@@ -24,7 +23,6 @@ const App = () => {
   const [showBeanData, setShowBeanData] = useState(false);
   const [showRoastingGraph, setShowRoastingGraph] = useState(false);
   const [showRegions, setShowRegions] = useState(true);
-  const [showDeleteBeanData, setShowDeleteBeanData] = useState(false);
   const [showUpdateBeanData, setShowUpdateBeanData] = useState(false);
   const [showNewBeanData, setShowNewBeanData] = useState(false);
   const [selectedBeanData, setSelectedBeanData] = useState(null);
@@ -52,6 +50,7 @@ const App = () => {
     const handleHeaderClick = () => {
       setShowBeanData(false);
       setShowRegions(true);
+      setShowUpdateBeanData(false);
       setShowRoastingGraph(false);
     };
 
@@ -96,6 +95,7 @@ const App = () => {
           region={selectedRegion}
           onBeanClick={handleBeanSelected}
           selectedBeanData={selectedBeanData}
+          setShowUpdateBeanData={setShowUpdateBeanData}
         />
       )}
       {showRoastingGraph && (
@@ -110,7 +110,6 @@ const App = () => {
               setShowRegions={setShowRegions}
             />
           )}
-          {showDeleteBeanData && <DeleteBean />}
         </div>
       )}
       <div className="NewBeanDataImage">

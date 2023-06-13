@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-// import DeleteBean from "./DeleteBean.jsx";
 import UpdateBean from "./UpdateBean.jsx";
 
-const BeanData = ({ region, onBeanClick, selectedBeanData }) => {
+const BeanData = ({
+  region,
+  onBeanClick,
+  selectedBeanData,
+  setShowUpdateBeanData,
+}) => {
   const [beanData, setBeanData] = useState({});
 
   useEffect(() => {
@@ -10,6 +14,7 @@ const BeanData = ({ region, onBeanClick, selectedBeanData }) => {
       .then((res) => res.json())
       .then((data) => {
         setBeanData(data);
+        setShowUpdateBeanData(false);
       });
   }, [region]);
 
